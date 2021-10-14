@@ -1,0 +1,26 @@
+{
+  "name": "Zaper",
+  "version": "1.0.0",
+  "description": "Bot criado para enviar mensagens e arquivos para o whatsapp",
+  "main": "index.js",
+  "scripts": {
+    "login:zap": "node src\\sessions\\init_session_whatsapp.js",
+    "login:powerbi": "node src\\sessions\\init_session_powerbi.js",
+    "download": "node src\\download_powerbi.js",
+    "upload": "node src\\upload_data.js"
+  },
+  "keywords": [
+    "Bot",
+    "Zaper",
+    "Envio de arquivos",
+    "Envio de mensagens",
+    "Whatsapp"
+  ],
+  "author": "Jose Hudson Sampaio Gomes",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "puppeteer": "^10.4.0",
+    "winston": "^3.3.3"
+  }
+}
