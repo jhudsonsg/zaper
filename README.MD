@@ -1,4 +1,6 @@
-# Report Sender
+# Zaper
+
+# Windows
 
 ## Dependências
 |          #       |  Link                          | Observações |
@@ -6,9 +8,23 @@
 |  Git / GitBash   |  https://git-scm.com/downloads | -           |
 |  Nodejs          |  https://nodejs.org/en/        | Use a versão 14.18 ou superior. |
 |  Chocolatey      |  https://chocolatey.org/       | Use o PowerShell aberto com permissões de administrador do sistema para instalação. |
-|  Make            |  [INSTALL.MD](./INSTALL.MD)    | -           |
+|  Make            |  #Como instalar                | -           |
+
+### Como instalar 
+
+#### Make
+Para fazer a instalação do Make e executar os comandos dos makefiles será necessario instalar o chocolatey, após isso utilize o seu PowerShell com permissões de admin do sistemas para executar os proximos comandos. (Após instalar o chocolatey caso não seja encontrado o binario choco reinicie o PowerShell para carregar as variáveis de ambiente do seus sistema).
+
+```bash
+# Para qualquer solicitação de instação digite "Y" para permitir acessos ao instalador.
+
+choco install make
+```
+
+Novamente após instalação do Make reinicie o seu PowerShell para carregar as variáveis de ambiente do seus sistema.
 
 ## Instalação e configurações
+
 Após instalar todas as dependências siga os passos para instalação o projeto. **(Recomendo fortemente que use o PowerShell em tudo com as permissões de admin no sistema)**:
 
 - [X] Configure o seu usuário no git.
@@ -18,8 +34,8 @@ Após instalar todas as dependências siga os passos para instalação o projeto
 ```bash
 # Dentro do diretório a ser instalado o projeto execute:
 
-git clone https://github.com/jhudsonsg/automation
-cd automation 
+git clone https://github.com/jhudsonsg/Zaper.git
+cd Zaper 
 make install
 ```
 
