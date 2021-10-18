@@ -1,6 +1,3 @@
-install:
-	.\bin\install.cmd
-
 run:
 	.\bin\run.cmd
 

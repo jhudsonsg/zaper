@@ -3,44 +3,29 @@
 # Windows
 
 ## Dependências
+A baixo está a lista de dependências necessarias para o projeto, caso queira instalar cada por conta propria, caso não vá direto para parte de instalação e configuração.
+
 |          #       |  Link                          | Observações |
 | ---------------- | ------------------------------ | ----------- |
+|  Chocolatey      |  https://chocolatey.org/       | Use o PowerShell aberto com permissões de administrador do sistema para instalação. |
 |  Git / GitBash   |  https://git-scm.com/downloads | -           |
 |  Nodejs          |  https://nodejs.org/en/        | Use a versão 14.18 ou superior. |
-|  Chocolatey      |  https://chocolatey.org/       | Use o PowerShell aberto com permissões de administrador do sistema para instalação. |
-|  Make            |  #Como instalar                | -           |
-
-### Como instalar 
-
-#### Make
-Para fazer a instalação do Make e executar os comandos dos makefiles será necessario instalar o chocolatey, após isso utilize o seu PowerShell com permissões de admin do sistemas para executar os proximos comandos. (Após instalar o chocolatey caso não seja encontrado o binario choco reinicie o PowerShell para carregar as variáveis de ambiente do seus sistema).
-
-```bash
-# Para qualquer solicitação de instação digite "Y" para permitir acessos ao instalador.
-
-choco install make
-```
-
-Novamente após instalação do Make reinicie o seu PowerShell para carregar as variáveis de ambiente do seus sistema.
+|  Make            |  -                             | -           |
 
 ## Instalação e configurações
 
 Após instalar todas as dependências siga os passos para instalação o projeto. **(Recomendo fortemente que use o PowerShell em tudo com as permissões de admin no sistema)**:
 
-- [X] Configure o seu usuário no git.
 - [X] Navegue em seus diretórios até o local desejado para instalar o projeto usando.
-- [X] Execute os seguintes comandos no PowerShell do seu ambiente para iniciar a instalação do projeto e suas libs.
+- [X] Execute os seguinte comando no PowerShell do seu ambiente para iniciar a instalação do projeto e suas dependências.
 
 ```bash
 # Dentro do diretório a ser instalado o projeto execute:
-
-git clone https://github.com/jhudsonsg/Zaper.git
-cd Zaper 
-make install
+.\install.cmd
 ```
 
-- [X] Depois de rodar os camando acima vá para o arquivo [.env](./.env) na raiz do projeto e preencha as informações necessarias para o sistema funcionar. (Caso o arquivo .env não exista você pode copiar o arquivo .env-example e mudar o nome para .env ou rodar o comando make install novamente) <br />
-- [X] Para achar o caminho do chrome que é requirido na [.env](./.env) abra o navegador e na barra de pesquisa digite "chrome://version/" depois copie o valor do "Caminho do executável" e cole no campo da [.env](./.env), coloque uma ***"/\"*** a mais **EM TODAS A BARRAS** do valor copiado para ficar ***"/\/\"*** (Barra dupla).
+- [X] Configure o seu usuário no git.
+- [X] Depois de rodar os camando acima vá para o arquivo [.env](./.env) na raiz do projeto e preencha as informações necessarias para o sistema funcionar. (Caso o arquivo .env não exista você pode copiar o arquivo .env-example e mudar o nome para .env ou rodar o comando .\install.cmd novamente) <br />
 - [X] Depois no arquivo [config/index.js](./config/index.js) insira os valores na variável ***GROUPS_PEOPLES*** seguindo o exemplo para enviar seus arquivos.
 
 ## Como usar
