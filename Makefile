@@ -2,13 +2,13 @@ run:
 	.\bin\run.cmd
 
 session_whatsapp:
-	node src\sessions\init_session_whatsapp.js
+	node .\src\index.js --session whatsapp
 
 session_powerbi:
-	node src\sessions\init_session_powerbi.js
+	node .\src\index.js --session powerbi
 
 download_data:
-	node src\download_powerbi.js
+	node .\src\index.js --data download
 
 upload_data:
-	node src\upload_data.js
+	node .\src\index.js --data upload

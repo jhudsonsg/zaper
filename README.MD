@@ -8,7 +8,7 @@ A baixo está a lista de dependências necessarias para o projeto, caso queira i
 |          #       |  Link                          | Observações |
 | ---------------- | ------------------------------ | ----------- |
 |  Chocolatey      |  https://chocolatey.org/       | Use o PowerShell aberto com permissões de administrador do sistema para instalação. |
-|  Git / GitBash   |  https://git-scm.com/downloads | -           |
+|  Git             |  https://git-scm.com/downloads | -           |
 |  Nodejs          |  https://nodejs.org/en/        | Use a versão 14.18 ou superior. |
 |  Make            |  -                             | -           |
 
