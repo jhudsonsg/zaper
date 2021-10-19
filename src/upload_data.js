@@ -58,6 +58,12 @@ const deleteFile = (filePath, nameFile) => {
             e.initUIEvent("input", true, true, window, 1);
 
             let messageBox = document.querySelectorAll("[contenteditable='true']")[1];
+            
+            while (messageBox == undefined || messageBox == null) {
+                processoUpload.log('info', 'Buscando caixa de mensagem.');
+                messageBox = document.querySelectorAll("[contenteditable='true']")[1];
+            }
+
             messageBox.innerHTML = `Olá ${nameAgente}, segue o arquivo ${nameFile}.`;
             messageBox.dispatchEvent(e);
         }, nameAgente, nameFile);
