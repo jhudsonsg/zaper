@@ -49,26 +49,15 @@ const deleteFile = (filePath, nameFile) => {
             document.querySelector(`[title="${nameAgente}"]`).dispatchEvent(mouseEvent);
         }, nameAgente);
 
-        await page.waitFor(2000);
-        await page.waitForSelector("[contenteditable='true']", { visible: true })
-
         /* ENVIA O TEXTO */
         await page.evaluate(async (nameAgente, nameFile) => {
             let e = document.createEvent("UIEvents");
             e.initUIEvent("input", true, true, window, 1);
 
             let messageBox = document.querySelectorAll("[contenteditable='true']")[1];
-            
-            while (messageBox == undefined || messageBox == null) {
-                processoUpload.log('info', 'Buscando caixa de mensagem.');
-                messageBox = document.querySelectorAll("[contenteditable='true']")[1];
-            }
-
             messageBox.innerHTML = `Olá ${nameAgente}, segue o arquivo ${nameFile}.`;
             messageBox.dispatchEvent(e);
         }, nameAgente, nameFile);
-
-        await page.waitFor(2000);
 
         /* ENVIA A MENSAGEM */
         await page.evaluate(async () => {
