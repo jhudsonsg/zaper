@@ -62,9 +62,8 @@ const deleteFile = (filePath, nameFile) => {
       processoUpload.log('error', error.message);
     }
 
-    await page.waitForSelector('[data-testid="clip"]', { visible: true })
-
     try {
+      await page.waitForSelector('[data-testid="clip"]', { visible: true })
       /* ENVIA O TEXTO */
       await page.evaluate(async (nameAgente, nameFile) => {
         let e = document.createEvent("UIEvents");
