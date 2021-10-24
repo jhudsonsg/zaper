@@ -87,7 +87,11 @@ const deleteFile = (filePath, nameFile) => {
         let e = document.createEvent("MouseEvents");
         e.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
         document.querySelector('span[data-icon="send"]').dispatchEvent(e);
-        document.querySelector('[data-testid="clip"]').click()
+
+        const clipSend = document.querySelector('[data-testid="clip"]')
+       
+        if (clipSend) clipSend.click()
+        
       });
     } catch (error) {
       console.log(`Não foi possivel clicar para enviar sua mensagem ao agente ${nameAgente}.`);
