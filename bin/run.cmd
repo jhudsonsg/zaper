@@ -1,7 +1,9 @@
-node src\download_powerbi.js
+@echo [+] Baixando dados para o envio.
+@node src\download_powerbi.js
 
-timeout 10
+@timeout 10
 
-node src\upload_data.js
+@echo [+] Excutando upload dos dados.
+@node src\upload_data.js
 
-echo [+] Processo finalizado.
+@echo [+] Processo finalizado.
