@@ -3,8 +3,6 @@ const fs = require('fs');
 const NewBrowser = require('./NewBrowser');
 const { processoUpload } = require('./util/logger');
 const { GROUPS_PEOPLES, PATH_DOWNLOAD_FILES } = require('../config');
-const { throws } = require('assert');
-
 
 const deleteFile = (filePath, nameFile) => {
   return new Promise((resolve) => {
@@ -46,16 +44,10 @@ const deleteFile = (filePath, nameFile) => {
       processoUpload.log('error', error.message);
     }
 
-    await page.waitFor(2000);
-
-    /* CLICA NO AGENTE PESQUISADO */
+    /* ENTRA NA CONVERSA DO AGENTE PESQUISADO */
     try {
-      await page.evaluate(async (nameAgente) => {
-        let mouseEvent = document.createEvent('MouseEvents');
-        mouseEvent.initEvent('mousedown', true, true);
-        document.querySelector(`[title="${nameAgente}"]`).dispatchEvent(mouseEvent);
-
-      }, nameAgente);
+      await page.waitFor(3000);
+      await page.keyboard.press('Enter');
     } catch (error) {
       console.log(`Não foi possivel clicar no agente ${nameAgente}.`);
       processoUpload.log('error', `Não foi possivel clicar no agente ${nameAgente}.`);
@@ -89,9 +81,8 @@ const deleteFile = (filePath, nameFile) => {
         document.querySelector('span[data-icon="send"]').dispatchEvent(e);
 
         const clipSend = document.querySelector('[data-testid="clip"]')
-       
+
         if (clipSend) clipSend.click()
-        
       });
     } catch (error) {
       console.log(`Não foi possivel clicar para enviar sua mensagem ao agente ${nameAgente}.`);
@@ -114,6 +105,7 @@ const deleteFile = (filePath, nameFile) => {
 
     processoUpload.log('info', `Processo da tentativa de envio do arquivo ${nameFile} ao agente ${nameAgente} finalizado.`);
 
+    await page.waitFor(5000)
     await page.close();
     await deleteFile(`${PATH_DOWNLOAD_FILES}${nameFile}`, nameFile);
   };
