@@ -1,3 +1,9 @@
+install:
+	.\bin\install.cmd
+
+update:
+	.\bin\update.cmd
+
 run:
 	.\bin\run.cmd
 
