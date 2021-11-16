@@ -1,10 +1,10 @@
-const NewBrowser = require('../NewBrowser');
+const Browser = require('../Browser');
 const { processoSession } = require('../util/logger');
 const { USER_POWERBI, PASS_POWERBI } = require('../../config');
 
 (async () => {
     processoSession.log('info', 'Iniciando sessão no PowerBi.')
-    const browser = await NewBrowser();
+    const browser = await Browser();
 
     const page = await browser.newPage();
     await page.setDefaultNavigationTimeout(0);

@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const { PATH_CHROME_INTERNAL, PATH_CHROME_CHACE } = require('../config');
 
-const NewBrowser = async () => {
+const Browser = async () => {
   const browser = await puppeteer.launch({
     headless: false,
     userDataDir: PATH_CHROME_CHACE,
@@ -15,4 +15,4 @@ const NewBrowser = async () => {
   return browser;
 }
 
-module.exports = NewBrowser;
+module.exports = Browser;

@@ -18,3 +18,15 @@ download_data:
 
 upload_data:
 	node .\src\index.js --data upload
+
+session_whatsapp_old:
+	node src\sessions\init_session_whatsapp.js
+
+session_powerbi_old:
+	node src\sessions\init_session_powerbi.js
+
+download_data_old:
+	node src\download_powerbi.js
+
+upload_data_old:
+	node src\upload_data.js

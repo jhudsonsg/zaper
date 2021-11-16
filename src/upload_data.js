@@ -3,10 +3,10 @@ const { GROUPS_PEOPLES, PATH_DOWNLOAD_FILES } = require('../config');
 const { processoUpload } = require('./util/logger');
 const { deleteFile } = require('./util/file');
 
-const NewBrowser = require('./NewBrowser');
+const Browser = require('./Browser');
 
 (async () => {
-  const browser = await NewBrowser();
+  const browser = await Browser();
   const page = await browser.newPage();
   await page.setViewport({ width: 1200, height: 800 });
 

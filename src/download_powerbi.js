@@ -1,4 +1,4 @@
-const NewBrowser = require('./NewBrowser');
+const Browser = require('./Browser');
 const { processoDownload } = require('./util/logger');
 const { GROUPS_PEOPLES, VERIFY_DOWNLOAD } = require('../config');
 const TIME_WAIT = 3000;
@@ -34,7 +34,7 @@ const watchDownloadProcessesFinal = async (browser) => {
 }
 
 (async () => {
-  const browser = await NewBrowser();
+  const browser = await Browser();
 
   processoDownload.log('info', 'Iniciando processo.');
 

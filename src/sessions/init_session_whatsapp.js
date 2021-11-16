@@ -1,9 +1,9 @@
-const NewBrowser = require('../NewBrowser');
+const Browser = require('../Browser');
 const { processoSession } = require('../util/logger');
 
 (async () => {
     processoSession.log('info', 'Iniciando sessão no Whatsapp.')
-    const browser = await NewBrowser();
+    const browser = await Browser();
 
     const page = await browser.newPage();
     await page.setViewport({ width: 1200, height: 800 });

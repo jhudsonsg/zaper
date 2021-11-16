@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { processoUpload } = require('./logger');
 
 const deleteFile = (filePath, nameFile) => {
     return new Promise((resolve) => {
