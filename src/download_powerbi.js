@@ -1,65 +1,72 @@
 const Browser = require('./Browser');
 const { processoDownload } = require('./util/logger');
-const { GROUPS_PEOPLES, VERIFY_DOWNLOAD } = require('../config');
-const TIME_WAIT = 3000;
-let finesh = 0;
-let _finesh = 0;
+const { GROUPS_PEOPLES, VERIFY_DOWNLOAD, DOWNLOAD_QUEUE_SIZE, DOWNLOAD_TIME_WAIT } = require('../config');
 
-const watchDownloadProcesses = async (page) => {
-  processoDownload.log('info', `Começando download do arquivo ${++_finesh}.`);
+let browser,
+  totalDownloads = 0;
+  currentTotalDownloads = 0;
+
+const watchDownloadCompletion = (page, fileName) => {
+  processoDownload.log('info', `Começando download do arquivo ${fileName}.`);
 
   let verify = setInterval(async () => {
-    console.log(`Baixando seus arquivos, aguarde...`)
+    console.log(`Baixando seu arquivo ${fileName}, aguarde...`)
     const contentElement = await page.$eval('.toastContents > .toastTitle', el => el.textContent)
     if (contentElement == VERIFY_DOWNLOAD) {
-      finesh++;
+      currentTotalDownloads++;
+      console.log(`Finalizando download do arquivo ${fileName}.`)
+      processoDownload.log('info', `Finalizando download do arquivo ${fileName}.`);
+      page.close();
       clearInterval(verify);
-      await page.close();
-
-      processoDownload.log('info', `Finalizando download do arquivo ${finesh}.`);
     }
-  }, TIME_WAIT);
+  }, DOWNLOAD_TIME_WAIT);
 }
 
-const watchDownloadProcessesFinal = async (browser) => {
-  let verify = setInterval(async () => {
-    if (finesh == GROUPS_PEOPLES.length) {
-      await browser.close();
-      clearInterval(verify);
+const execProcessDownload = groupPeoples => {
+  return new Promise(async (res, rej) => {
+    for (let i = 0; i < groupPeoples.length; i++) {
+      const [_, fileName, link] = groupPeoples[i]
 
-      processoDownload.log('info', 'Finalizado todos os downloads.');
-      processoDownload.log('info', 'Processo finalizado.');
+      const page = await browser.newPage();
+      await page.setDefaultNavigationTimeout(0);
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.goto(link, { waitUntil: ['load', 'domcontentloaded'] });
+
+      await page.waitForSelector('#exportMenuBtn', { visible: true })
+      await page.$eval('#exportMenuBtn', btn => btn.click());
+
+      await page.waitForSelector('.mat-menu-content > button:nth-child(3)', { visible: true })
+      await page.$eval('.mat-menu-content > button:nth-child(3)', btn => btn.click());
+
+      await page.waitForSelector('.templateActions > button', { visible: true })
+      await page.$eval('.templateActions > button', btn => btn.click());
+
+      await page.waitForSelector('.toastContents > .toastTitle', { visible: true })
+
+      watchDownloadCompletion(page, fileName)
     }
-  }, TIME_WAIT);
+
+    let verify = setInterval(() => {
+      console.log(`Verificando processo da fila de ${DOWNLOAD_QUEUE_SIZE} downloads.`);
+      if (currentTotalDownloads == totalDownloads) {
+        currentTotalDownloads = 0;
+        res();
+        clearInterval(verify);
+      }
+    }, DOWNLOAD_TIME_WAIT);
+  })
 }
 
 (async () => {
-  const browser = await Browser();
+  processoDownload.log('info', 'Iniciando processo de download.');
+  browser = await Browser();
 
-  processoDownload.log('info', 'Iniciando processo.');
-
-  for ([agente, file, link] of GROUPS_PEOPLES) {
-    const page = await browser.newPage();
-    await page.setDefaultNavigationTimeout(0);
-    await page.setViewport({ width: 1200, height: 800 });
-    await page.goto(link, {
-      waitUntil: ['load', 'domcontentloaded']
-    });
-
-    await page.waitForSelector('#exportMenuBtn', { visible: true })
-    await page.$eval('#exportMenuBtn', btn => btn.click());
-
-    await page.waitForSelector('.mat-menu-content > button:nth-child(3)', { visible: true })
-    await page.$eval('.mat-menu-content > button:nth-child(3)', btn => btn.click());
-
-    await page.waitForSelector('.templateActions > button', { visible: true })
-    await page.$eval('.templateActions > button', btn => btn.click());
-
-    await page.waitForSelector('.toastContents > .toastTitle', { visible: true })
-    await page.waitFor(2000)
-
-    await watchDownloadProcesses(page);
+  while (GROUPS_PEOPLES.length > 0) {
+    const groupPeoples = GROUPS_PEOPLES.splice(0, DOWNLOAD_QUEUE_SIZE);
+    totalDownloads = groupPeoples.length;
+    await execProcessDownload(groupPeoples);
   }
 
-  await watchDownloadProcessesFinal(browser);
+  await browser.close();
+  processoDownload.log('info', 'Processo finalizado.');
 })();

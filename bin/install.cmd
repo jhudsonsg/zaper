@@ -14,7 +14,4 @@ copy .env-example .env
 @echo [+] Instalando dependencias do projeto.
 npm install
 
-@echo [+] Buildando projeto.
-npm run build
-
 @echo [+] Processo finalizado.

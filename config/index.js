@@ -11,6 +11,8 @@ module.exports = {
   PATH_DOWNLOAD_FILES: `${process.env.USERPROFILE}\\Downloads\\`,
   USER_POWERBI: process.env.USER_POWERBI,
   PASS_POWERBI: process.env.PASS_POWERBI,
+  DOWNLOAD_QUEUE_SIZE: process.env.DOWNLOAD_QUEUE_SIZE || 5,
+  DOWNLOAD_TIME_WAIT: process.env.DOWNLOAD_TIME_WAIT || 3000,
 
   /**********************************************************************************************************
   * 
