@@ -1,0 +1,29 @@
+const fs = require('fs');
+
+const NUMBER_CONTENT_FOR_LINE = 3
+
+const getContetFile = pathFile => {
+  const buffer = fs.readFileSync(pathFile, 'utf8')
+  return buffer.toString();
+}
+
+const getGroupPeoples = (nameFile) => {
+  const content = getContetFile(`${nameFile}`).split(',')
+  const groupsPeoples = []
+  
+  while (content.length > 0) {
+    const group = content.splice(0, NUMBER_CONTENT_FOR_LINE);
+    group[0] = String(group[0]).trim()
+    group[1] = String(group[1]).trim()
+    group[2] = String(group[2]).trim()
+    groupsPeoples.push([...group])
+  }
+  groupsPeoples.pop()
+
+  return groupsPeoples;
+}
+
+
+module.exports = {
+  getGroupPeoples
+} 

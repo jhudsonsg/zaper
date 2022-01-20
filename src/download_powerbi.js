@@ -1,6 +1,7 @@
 const Browser = require('./Browser');
+const { NAME_FILE_GROUPS_PEOPLES, GROUPS_PEOPLES, VERIFY_DOWNLOAD, DOWNLOAD_QUEUE_SIZE, DOWNLOAD_TIME_WAIT } = require('../config');
 const { processoDownload } = require('./util/logger');
-const { GROUPS_PEOPLES, VERIFY_DOWNLOAD, DOWNLOAD_QUEUE_SIZE, DOWNLOAD_TIME_WAIT } = require('../config');
+const { getGroupPeoples } = require('./util/helpers');
 
 let browser,
   totalDownloads = 0;
@@ -60,8 +61,9 @@ const execProcessDownload = groupPeoples => {
 (async () => {
   processoDownload.log('info', 'Iniciando processo de download.');
   browser = await Browser();
-
-  while (GROUPS_PEOPLES.length > 0) {
+  groupsPeoples = getGroupPeoples(NAME_FILE_GROUPS_PEOPLES);
+  
+  while (groupsPeoples.length > 0) {
     const groupPeoples = GROUPS_PEOPLES.splice(0, DOWNLOAD_QUEUE_SIZE);
     totalDownloads = groupPeoples.length;
     await execProcessDownload(groupPeoples);
