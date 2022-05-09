@@ -58,17 +58,19 @@ const execProcessDownload = groupPeoples => {
   })
 }
 
-(async () => {
+const run = async () => {
   processoDownload.log('info', 'Iniciando processo de download.');
+  const groupsPeoples = getGroupPeoples(NAME_FILE_GROUPS_PEOPLES);
   browser = await Browser();
-  groupsPeoples = getGroupPeoples(NAME_FILE_GROUPS_PEOPLES);
   
   while (groupsPeoples.length > 0) {
-    const groupPeoples = GROUPS_PEOPLES.splice(0, DOWNLOAD_QUEUE_SIZE);
-    totalDownloads = groupPeoples.length;
-    await execProcessDownload(groupPeoples);
+    const groupPeoplesSlice = groupsPeoples.splice(0, DOWNLOAD_QUEUE_SIZE);
+    totalDownloads = groupPeoplesSlice.length;
+    await execProcessDownload(groupPeoplesSlice);
   }
 
   await browser.close();
   processoDownload.log('info', 'Processo finalizado.');
-})();
+};
+
+run()

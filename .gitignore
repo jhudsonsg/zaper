@@ -3,3 +3,5 @@
 /logs/*/
 .env
 groups_peoples.txt
+qrcode.png
+sessions_whatsapp

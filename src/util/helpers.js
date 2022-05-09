@@ -10,7 +10,7 @@ const getContetFile = pathFile => {
 const getGroupPeoples = (nameFile) => {
   const content = getContetFile(`${nameFile}`).split(',')
   const groupsPeoples = []
-  
+
   while (content.length > 0) {
     const group = content.splice(0, NUMBER_CONTENT_FOR_LINE);
     group[0] = String(group[0]).trim()
@@ -23,7 +23,14 @@ const getGroupPeoples = (nameFile) => {
   return groupsPeoples;
 }
 
+const pause = time => new Promise(res => setTimeout(() => { res(); }, time))
+
+const getFormatTo = (to) => {
+  if (Number.isInteger(Number(to))) return `${to}@c.us`
+  
+  return `${to}@g.us`
+}
 
 module.exports = {
-  getGroupPeoples
+  getGroupPeoples, pause, getFormatTo
 } 

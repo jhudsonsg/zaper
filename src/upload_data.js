@@ -1,118 +1,79 @@
-const { GROUPS_PEOPLES, PATH_DOWNLOAD_FILES } = require('../config');
+const venom = require('venom-bot');
+const { NAME_FILE_GROUPS_PEOPLES, PATH_DOWNLOAD_FILES, TIME_SEND_FILE } = require('../config');
+const venomConfig = require('../config/venon.config.js');
 
+const { getGroupPeoples, pause, getFormatTo } = require('./util/helpers');
 const { processoUpload } = require('./util/logger');
 const { deleteFile } = require('./util/file');
 
-const Browser = require('./Browser');
+const groupsPeoples = getGroupPeoples(NAME_FILE_GROUPS_PEOPLES);
 
-(async () => {
-  const browser = await Browser();
-  const page = await browser.newPage();
-  await page.setViewport({ width: 1200, height: 800 });
+const sendMessage = (client, to) => {
+  return new Promise(async (res, rej) => {
+    await client.sendText(getFormatTo(to), 'Mensagem enviada com sucesso.')
+      .then((result) => {
+        if (result.status = 'ok') res(`Mensagem enviada para ${to}`);
+        else res(result)
+      })
+      .catch((erro) => {
+        res(`Problema o enviar mensagem para ${to}`);
+        console.error(erro);
+      });
+  })
+}
 
-  await page.goto('https://web.whatsapp.com/', {
-    waitUntil: ['load', 'domcontentloaded', 'networkidle0', 'networkidle2']
+const sendFile = (client, to, fileName) => {
+  return new Promise(async (res, rej) => {
+    await client
+      .sendFile(
+        getFormatTo(to),
+        `${PATH_DOWNLOAD_FILES}${fileName}`,
+        fileName,
+        fileName
+      )
+      .then((result) => {
+        if (result.status = 'ok') res(`Arquivo enviada para ${to}`);
+        else res(result)
+      })
+      .catch((erro) => {
+        res(`Problema o enviar arquivo para ${to}`);
+        console.error(erro);
+      });
+  })
+}
+
+const run = async () => {
+  const client = await venom.create(venomConfig)
+
+  client.onStateChange(async (state) => {
+    if ('CONFLICT'.includes(state)) client.useHere();
+
+    if ('UNPAIRED'.includes(state)) console.log('logout');
+
+    if ('OPENING'.includes(state)) {
+      processoUpload.log('status', 'Excluindo sessões');
+      console.log('Excluindo sessões. ', token_path)
+      processoUpload.log('status', 'Reabrindo sessão');
+      console.log('Reabrindo sessões.');
+      await venom.create(venomConfig);
+    }
   });
 
-  await page.waitFor(2000)
-  await page.waitForSelector('[contenteditable="true"]', { visible: true })
+  for (let i = 0; i < groupsPeoples.length; i++) {
+    const [to, fileName, _] = groupsPeoples[i];
+    const resultMessage = await sendMessage(client, to)
+    processoUpload.log('status', resultMessage);
+    console.log(resultMessage);
 
-  processoUpload.log('info', 'Iniciando processo.');
+    const resultFile = await sendFile(client, to, fileName)
+    processoUpload.log('status', resultFile);
+    console.log(resultFile);
 
-  for (agent of GROUPS_PEOPLES) {
-    const [nameAgente, nameFile] = agent;
+    await deleteFile(`${PATH_DOWNLOAD_FILES}${fileName}`, fileName);
+    await pause(TIME_SEND_FILE);
+  }
 
-    const page = await browser.newPage();
-    await page.setViewport({ width: 1200, height: 800 });
-    await page.goto('https://web.whatsapp.com/', { waitUntil: ['load', 'domcontentloaded', 'networkidle0', 'networkidle2'] });
+  process.exit()
+}
 
-    await page.waitForSelector('[contenteditable="true"]', { visible: true })
-    await page.waitFor(5000);
-    await page.keyboard.press('Tab');
-
-    /* EXECUTA A BUSCA */
-    try {
-      await page.evaluate(async (nameAgente) => {
-        let e = document.createEvent("UIEvents");
-        e.initUIEvent("input", true, true, window, 1);
-
-        let searchAgent = document.querySelectorAll("[contenteditable='true']")[0];
-        searchAgent.innerHTML = nameAgente;
-        searchAgent.dispatchEvent(e);
-      }, nameAgente);
-    } catch (error) {
-      console.log(`Não foi possivel realizar a busca ao agente ${nameAgente}.`);
-      processoUpload.log('error', `Não foi possivel realizar a busca ao agente ${nameAgente}.`);
-      processoUpload.log('error', error.message);
-    }
-
-    /* ENTRA NA CONVERSA DO AGENTE PESQUISADO */
-    try {
-      await page.waitFor(3000);
-      await page.keyboard.press('Enter');
-    } catch (error) {
-      console.log(`Não foi possivel clicar no agente ${nameAgente}.`);
-      processoUpload.log('error', `Não foi possivel clicar no agente ${nameAgente}.`);
-      processoUpload.log('error', error.message);
-    }
-
-    await page.waitForSelector('[data-testid="clip"]', { visible: true })
-
-    try {
-      /* ENVIA O TEXTO */
-      await page.evaluate(async (nameAgente, nameFile) => {
-        let e = document.createEvent("UIEvents");
-        e.initUIEvent("input", true, true, window, 1);
-
-        let messageBox = document.querySelectorAll("[contenteditable='true']")[1];
-        messageBox.innerHTML = `Olá ${nameAgente}, segue o arquivo ${nameFile}.`;
-        messageBox.dispatchEvent(e);
-
-      }, nameAgente, nameFile);
-    } catch (error) {
-      console.log(`Não foi possivel selecionar a caixa de texto do agente ${nameAgente}.`);
-      processoUpload.log('error', `Não foi possivel selecionar a caixa de texto do agente ${nameAgente}.`);
-      processoUpload.log('error', error.message);
-    }
-
-    try {
-      /* ENVIA A MENSAGEM */
-      await page.evaluate(async () => {
-        let e = document.createEvent("MouseEvents");
-        e.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-        document.querySelector('span[data-icon="send"]').dispatchEvent(e);
-
-        const clipSend = document.querySelector('[data-testid="clip"]')
-
-        if (clipSend) clipSend.click()
-      });
-    } catch (error) {
-      console.log(`Não foi possivel clicar para enviar sua mensagem ao agente ${nameAgente}.`);
-      processoUpload.log('error', `Não foi possivel clicar para enviar sua mensagem ao agente ${nameAgente}.`);
-      processoUpload.log('error', error.message);
-    }
-
-    /* ENVIA O ARQUIVO */
-    try {
-      const elementHandle = await page.$('[data-testid="attach-document"] + input');
-      await elementHandle.uploadFile(`${PATH_DOWNLOAD_FILES}${nameFile}`);
-      await page.waitForSelector('[data-testid="send"]', { visible: true })
-      await page.$eval('[data-testid="send"]', btn => btn.click());
-      await page.waitFor(2000)
-    } catch (error) {
-      console.log(`Não foi possivel envia o arquivo ao agente ${nameAgente}.`);
-      processoUpload.log('error', `Não foi possivel envia o arquivo ao agente ${nameAgente}.`);
-      processoUpload.log('error', error.message);
-    }
-
-    processoUpload.log('info', `Processo da tentativa de envio do arquivo ${nameFile} ao agente ${nameAgente} finalizado.`);
-
-    await page.waitFor(5000)
-    await page.close();
-    await deleteFile(`${PATH_DOWNLOAD_FILES}${nameFile}`, nameFile);
-  };
-
-  await browser.close();
-
-  processoUpload.log('info', 'Processo finalizado.');
-})();
+run()

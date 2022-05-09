@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Bot criado para enviar mensagens e arquivos para o whatsapp",
   "scripts": {
-    "build": "echo buildando"
+    "start": "bin/run.cmd"
   },
   "keywords": [
     "Bot",
@@ -16,7 +16,9 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^10.0.0",
+    "open": "^8.4.0",
     "puppeteer": "^10.4.0",
+    "venom-bot": "^4.0.11",
     "winston": "^3.3.3"
   }
 }
