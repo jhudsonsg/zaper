@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const NUMBER_CONTENT_FOR_LINE = 3
+const NUMBER_CONTENT_FOR_LINE = 4
 
 const getContetFile = pathFile => {
   const buffer = fs.readFileSync(pathFile, 'utf8')
@@ -16,6 +16,7 @@ const getGroupPeoples = (nameFile) => {
     group[0] = String(group[0]).trim()
     group[1] = String(group[1]).trim()
     group[2] = String(group[2]).trim()
+    group[3] = String(group[3]).trim()
     groupsPeoples.push([...group])
   }
   groupsPeoples.pop()
@@ -25,8 +26,8 @@ const getGroupPeoples = (nameFile) => {
 
 const pause = time => new Promise(res => setTimeout(() => { res(); }, time))
 
-const getFormatTo = (to) => {
-  if (Number.isInteger(Number(to))) return `${to}@c.us`
+const getFormatTo = (to, type) => {
+  if (type === 'c') return `${to}@c.us`
   
   return `${to}@g.us`
 }

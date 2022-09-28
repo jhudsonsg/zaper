@@ -15,11 +15,5 @@ module.exports = {
   DOWNLOAD_TIME_WAIT: process.env.DOWNLOAD_TIME_WAIT || 3000,
   NAME_FILE_GROUPS_PEOPLES: 'groups_peoples.txt',
 
-  /**********************************************************************************************************
-  * 
-  * Configuração do Chrome.
-  * 
-  \***********************************************************************************************************/
-  PATH_CHROME_INTERNAL: process.env.PATH_CHROME_INTERNAL,
-  PATH_CHROME_CHACE: './puppeteer_data',
+  TIME_SEND_FILE: process.env.TIME_SEND_FILE || 3000
 }
