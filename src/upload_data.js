@@ -1,36 +1,16 @@
-const { NAME_FILE_GROUPS_PEOPLES, PATH_DOWNLOAD_FILES, TIME_SEND_FILE } = require('../config');
-const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const { Client, LocalAuth } = require('whatsapp-web.js');
 
-const { getGroupPeoples, pause, getFormatTo } = require('./util/helpers');
+const { NAME_FILE_GROUPS_PEOPLES, PATH_DOWNLOAD_FILES, TIME_SEND_FILE } = require('../config');
+
+const { getGroupPeoples, pause } = require('./util/helpers');
 const { processoUpload } = require('./util/logger');
 const { deleteFile } = require('./util/file');
 
+const strategySender = require('./sender/StrategySender');
+
 const groupsPeoples = getGroupPeoples(NAME_FILE_GROUPS_PEOPLES);
-
-const sendMessage = (client, to, type) => {
-  return new Promise(async (res, rej) => {
-    try {
-      await client.sendMessage(getFormatTo(to, type), 'Enviando Acompanhamento de vendas.');
-      res(`Mensagem enviada para ${to}`)
-    } catch (error) {
-      res(`Problema o enviar mensagem para ${to}`);
-    }
-  })
-}
-
-const sendFile = (client, to, fileName, type) => {
-  return new Promise(async (res, rej) => {
-    try {
-      const media = MessageMedia.fromFilePath(`${PATH_DOWNLOAD_FILES}${fileName}`);
-      await client.sendMessage(getFormatTo(to, type), media);
-      res(`Arquivo enviado para ${to}`)
-    } catch (error) {
-      console.error(erro);
-      res(`Problema o enviar arquivo para ${to}`);
-    }
-  })
-}
+const sender = strategySender('whatsappwebjs');
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -64,11 +44,12 @@ client.on('ready', async () => {
 
   for (let i = 0; i < groupsPeoples.length; i++) {
     const [to, fileName, _, type] = groupsPeoples[i];
-    const resultMessage = await sendMessage(client, to, type)
+
+    const resultMessage = await sender.sendMessage(client, to, type)
     processoUpload.log('status', resultMessage);
     console.log(resultMessage);
 
-    const resultFile = await sendFile(client, to, fileName, type)
+    const resultFile = await sender.sendFile(client, to, fileName, type)
     processoUpload.log('status', resultFile);
     console.log(resultFile);
 

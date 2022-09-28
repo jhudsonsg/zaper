@@ -1,6 +1,6 @@
 {
   "name": "Zaper",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Bot criado para enviar mensagens e arquivos para o whatsapp",
   "scripts": {
     "start": "bin/run.cmd",
