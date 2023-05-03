@@ -33,35 +33,35 @@ client.on('authenticated', () => {
 
 client.on('auth_failure', msg => {
   console.error('Sessão com problemas.', msg);
-  processoUpload.log('status', 'Sessão com problemas.');
+  processoUpload.info('Sessão com problemas.');
   process.exit();
 });
 
 client.on('ready', async () => {
   console.log('Iniciando envio');
-  processoUpload.log('status', 'Iniciando envio de mensagens');
+  processoUpload.info('Iniciando envio de mensagens');
   console.log('--------------------------------------------------------------');
 
   for (let i = 0; i < groupsPeoples.length; i++) {
     const [to, fileName, _, type] = groupsPeoples[i];
 
     const resultMessage = await sender.sendMessage(client, to, type)
-    processoUpload.log('status', resultMessage);
+    processoUpload.info(resultMessage);
     console.log(resultMessage);
 
     const resultFile = await sender.sendFile(client, to, fileName, type)
-    processoUpload.log('status', resultFile);
+    processoUpload.info(resultFile);
     console.log(resultFile);
 
     console.log('--------------------------------------------------------------');
 
-    await deleteFile(`${PATH_DOWNLOAD_FILES}${fileName}`, fileName);
+    //await deleteFile(`${PATH_DOWNLOAD_FILES}${fileName}`, fileName);
     await pause(TIME_SEND_FILE);
   }
 
   setTimeout(() => {
     console.log('Finalizando envio');
-    processoUpload.log('status', 'Finalizando envio');
+    processoUpload.info('Finalizando envio');
     process.exit()
   }, 5000);
 });

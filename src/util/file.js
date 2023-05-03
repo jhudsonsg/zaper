@@ -5,9 +5,9 @@ const deleteFile = (filePath, nameFile) => {
     return new Promise((res, rej) => {
         try {
             fs.unlinkSync(filePath);
-            processoUpload.log('info', `Arquivo ${nameFile} foi deletado com sucesso.`);
+            processoUpload.info(`Arquivo ${nameFile} foi deletado com sucesso.`);
         } catch (error) {
-            processoUpload.log('error', `Arquivo ${nameFile} não foi deletado.`);
+            processoUpload.error('error', `Arquivo ${nameFile} não foi deletado.`);
         }
         res();
     })

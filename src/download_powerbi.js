@@ -8,7 +8,7 @@ let browser,
   currentTotalDownloads = 0;
 
 const watchDownloadCompletion = (page, fileName) => {
-  processoDownload.log('info', `Começando download do arquivo ${fileName}.`);
+  processoDownload.info(`Começando download do arquivo ${fileName}.`);
 
   let verify = setInterval(async () => {
     console.log(`Baixando seu arquivo ${fileName}, aguarde...`)
@@ -16,7 +16,7 @@ const watchDownloadCompletion = (page, fileName) => {
     if (contentElement == VERIFY_DOWNLOAD) {
       currentTotalDownloads++;
       console.log(`Finalizando download do arquivo ${fileName}.`)
-      processoDownload.log('info', `Finalizando download do arquivo ${fileName}.`);
+      processoDownload.info(`Finalizando download do arquivo ${fileName}.`);
       page.close();
       clearInterval(verify);
     }
@@ -59,7 +59,7 @@ const execProcessDownload = groupPeoples => {
 }
 
 const run = async () => {
-  processoDownload.log('info', 'Iniciando processo de download.');
+  processoDownload.info('Iniciando processo de download.');
   const groupsPeoples = getGroupPeoples(NAME_FILE_GROUPS_PEOPLES);
   browser = await Browser();
   
@@ -70,7 +70,7 @@ const run = async () => {
   }
 
   await browser.close();
-  processoDownload.log('info', 'Processo finalizado.');
+  processoDownload.info('Processo finalizado.');
 };
 
 run()

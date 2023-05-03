@@ -3,7 +3,7 @@ const { processoSession } = require('../util/logger');
 const { USER_POWERBI, PASS_POWERBI } = require('../../config');
 
 (async () => {
-    processoSession.log('info', 'Iniciando sessão no PowerBi.')
+    processoSession.info('Iniciando sessão no PowerBi.')
     const browser = await Browser();
 
     const page = await browser.newPage();
@@ -24,5 +24,5 @@ const { USER_POWERBI, PASS_POWERBI } = require('../../config');
 
     await browser.close();
 
-    processoSession.log('info', 'Sessão iniciada com sucesso.')
+    processoSession.info('Sessão iniciada com sucesso.')
 })();
