@@ -15,5 +15,6 @@ module.exports = {
   DOWNLOAD_TIME_WAIT: process.env.DOWNLOAD_TIME_WAIT || 3000,
   NAME_FILE_GROUPS_PEOPLES: 'groups_peoples.txt',
 
-  TIME_SEND_FILE: process.env.TIME_SEND_FILE || 3000
+  TIME_SEND_FILE: process.env.TIME_SEND_FILE || 3000,
+  STRATEGY: process.env.STRATEGY || 'venombot'
 }
